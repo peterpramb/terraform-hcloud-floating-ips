@@ -39,7 +39,8 @@ resource "hcloud_rdns" "floating_ips" {
   for_each       = {
     for name, float_ip in hcloud_floating_ip.floating_ips : name => merge(float_ip, {
       "dns_ptr" = local.float_ips[name].dns_ptr
-    }) if(lookup(local.float_ips[name], "dns_ptr", null) != null)
+    }) if(lookup(local.float_ips[name], "dns_ptr", null) != null &&
+         local.float_ips[name].dns_ptr != ""))
   }
 
   dns_ptr        = each.value.dns_ptr
