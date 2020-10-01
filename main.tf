@@ -14,12 +14,32 @@ locals {
     for float_ip in var.floating_ips : float_ip.name => float_ip
   }
 
-  # Build a map of all provided floating IP objects with RDNS, indexed by
-  # floating IP name:
-  rdns        = {
-    for float_ip in local.float_ips : float_ip.name => float_ip
-      if(lookup(float_ip, "dns_ptr", null) != null && float_ip.dns_ptr != "")
-  }
+  # Build a map of all provided floating IP RDNS objects, indexed by floating
+  # IP name (for IPv4), or floating IP name and hostnum (for IPv6). With IPv6,
+  # append each provided hostnum to the provisioned IPv6 network to form the
+  # final IPv6 address:
+  rdns        = merge(
+    {
+      for float_ip in local.float_ips : float_ip.name => merge(float_ip, {
+        "ip_address" = hcloud_floating_ip.floating_ips[float_ip.name].ip_address
+      }) if(float_ip.type == "ipv4" &&
+           lookup(float_ip, "dns_ptr", null) != null && float_ip.dns_ptr != "")
+    },
+    {
+      for float_ip in flatten([
+        for float_ip in local.float_ips : [
+          for rdns in float_ip.dns_ptr6 : merge(float_ip, {
+            "dns_ptr"    = rdns[0]
+            "host_num6"  = rdns[1]
+            "ip_address" = format("%s%s",
+              hcloud_floating_ip.floating_ips[float_ip.name].ip_address,
+              rdns[1])
+          }) if(lookup(float_ip, "dns_ptr6", null) != null && rdns[0] != "" &&
+               rdns[1] != "")
+        ] if(float_ip.type == "ipv6")
+      ]) : "${float_ip.name}:${float_ip.host_num6}" => float_ip
+    }
+  )
 
   # Build a map of all provided floating IP objects to be assigned, indexed
   # by floating IP name and server ID:
@@ -57,12 +77,7 @@ resource "hcloud_rdns" "floating_ip_rdns" {
 
   dns_ptr        = each.value.dns_ptr
   floating_ip_id = hcloud_floating_ip.floating_ips[each.value.name].id
-  ip_address     = (each.value.type == "ipv6" && each.value.host_num6 != null ?
-    format("%s%s",
-           hcloud_floating_ip.floating_ips[each.value.name].ip_address,
-           each.value.host_num6) :
-    hcloud_floating_ip.floating_ips[each.value.name].ip_address
-  )
+  ip_address     = each.value.ip_address
 }
 
 

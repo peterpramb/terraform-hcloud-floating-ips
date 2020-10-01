@@ -25,7 +25,10 @@ output "floating_ips" {
   description = "A list of all floating IP objects."
   value = [
     for float_ip in hcloud_floating_ip.floating_ips : merge(float_ip, {
-      "rdns" = lookup(hcloud_rdns.floating_ip_rdns, float_ip.name, {})
+      "rdns" = [
+        for rdns in hcloud_rdns.floating_ip_rdns : rdns
+          if(tostring(rdns.floating_ip_id) == float_ip.id)
+      ]
     })
   ]
 }
