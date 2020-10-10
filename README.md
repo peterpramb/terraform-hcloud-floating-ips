@@ -121,30 +121,23 @@ floating_ips = [
 
 | Name | Description |
 |------|-------------|
-| floating\_ip\_ids | Map of all floating IP IDs and associated names. |
-| floating\_ip\_names | Map of all floating IP names and associated IDs. |
 | floating\_ips | List of all floating IP objects. |
-| floating\_ip\_rdns\_ids | Map of all floating IP RDNS IDs and associated names. |
-| floating\_ip\_rdns\_names | Map of all floating IP RDNS names and associated IDs. |
+| floating\_ip\_ids | Map of all floating IP objects indexed by ID. |
+| floating\_ip\_names | Map of all floating IP objects indexed by name. |
 | floating\_ip\_rdns | List of all floating IP RDNS objects. |
-| floating\_ip\_assignment\_ids | Map of all floating IP assignment IDs and associated names. |
-| floating\_ip\_assignment\_names | Map of all floating IP assignment names and associated IDs. |
+| floating\_ip\_rdns\_ids | Map of all floating IP RDNS objects indexed by ID. |
+| floating\_ip\_rdns\_names | Map of all floating IP RDNS objects indexed by name. |
 | floating\_ip\_assignments | List of all floating IP assignment objects. |
+| floating\_ip\_assignment\_ids | Map of all floating IP assignment objects indexed by ID. |
+| floating\_ip\_assignment\_names | Map of all floating IP assignment objects indexed by name. |
 
 
 ### Defaults
 
 ```terraform
-floating_ip_ids = {
-  "342748" = "fip4-nbg1-1"
-}
-
-floating_ip_names = {
-  "fip4-nbg1-1" = "342748"
-}
-
 floating_ips = [
   {
+    "assignment" = {}
     "description" = ""
     "home_location" = "nbg1"
     "id" = "342748"
@@ -156,17 +149,45 @@ floating_ips = [
   },
 ]
 
+floating_ip_ids = {
+  "342748" = {
+    "assignment" = {}
+    "description" = ""
+    "home_location" = "nbg1"
+    "id" = "342748"
+    "ip_address" = "192.0.2.1"
+    "labels" = {}
+    "name" = "fip4-nbg1-1"
+    "rdns" = []
+    "type" = "ipv4"
+  }
+}
+
+floating_ip_names = {
+  "fip4-nbg1-1" = {
+    "assignment" = {}
+    "description" = ""
+    "home_location" = "nbg1"
+    "id" = "342748"
+    "ip_address" = "192.0.2.1"
+    "labels" = {}
+    "name" = "fip4-nbg1-1"
+    "rdns" = []
+    "type" = "ipv4"
+  }
+}
+
+floating_ip_rdns = []
+
 floating_ip_rdns_ids = {}
 
 floating_ip_rdns_names = {}
 
-floating_ip_rdns = []
+floating_ip_assignments = []
 
 floating_ip_assignment_ids = {}
 
 floating_ip_assignment_names = {}
-
-floating_ip_assignments = []
 ```
 
 
