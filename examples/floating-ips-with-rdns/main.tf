@@ -8,7 +8,7 @@
 # ------------
 
 locals {
-  # Enrich user configuration for floating_ip module
+  # Enrich user configuration for floating_ip module:
   floating_ips = [
     {
       "name"          = "fip4-${data.hcloud_location.one.name}-1"
