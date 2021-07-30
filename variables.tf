@@ -8,7 +8,7 @@
 # ---------------
 
 variable "floating_ips" {
-  description = "The list of floating IP objects to be managed. Each floating IP object supports the following parameters: 'name' (string, required), 'home_location' (string, required), 'type' (string, required), 'description' (string, optional), 'dns_ptr' (string, IPv4 only, optional), 'dns_ptr6' (list of name/hostnum tuples, IPv6 only, optional), 'server_id' (string, optional), 'labels' (map of KV pairs, optional)."
+  description = "The list of floating IP objects to be managed. Each floating IP object supports the following parameters: 'name' (string, required), 'home_location' (string, required), 'type' (string, required), 'description' (string, optional), 'dns_ptr' (string, IPv4 only, optional), 'dns_ptr6' (list of name/hostnum tuples, IPv6 only, optional), 'server' (server object, optional), 'labels' (map of KV pairs, optional). The server object supports the following parameters: 'name' (string, required), 'id' (string, required)."
 
   type        = list(
     object({
@@ -18,7 +18,10 @@ variable "floating_ips" {
       description   = string
       dns_ptr       = string
       dns_ptr6      = list(tuple([string, string]))
-      server_id     = string
+      server        = object({
+        name = string
+        id   = string
+      })
       labels        = map(string)
     })
   )
@@ -31,7 +34,7 @@ variable "floating_ips" {
       description   = null
       dns_ptr       = null
       dns_ptr6      = []
-      server_id     = null
+      server        = null
       labels        = {}
     }
   ]

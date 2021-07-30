@@ -44,11 +44,12 @@ locals {
   )
 
   # Build a map of all provided floating IP objects to be assigned, indexed
-  # by floating IP name:
+  # by floating IP and server names:
   assignments = {
-    for float_ip in local.float_ips : float_ip.name => merge(float_ip, {
-      "floating_ip" = float_ip.name
-    }) if(try(float_ip.server_id, null) != null && float_ip.server_id != "")
+    for float_ip in local.float_ips :
+      "${float_ip.name}:${float_ip.server.name}" => merge(float_ip, {
+        "floating_ip" = float_ip.name
+      }) if(try(float_ip.server.name, null) != null)
   }
 }
 
@@ -90,5 +91,5 @@ resource "hcloud_floating_ip_assignment" "assignments" {
    for_each       = local.assignments
 
    floating_ip_id = hcloud_floating_ip.floating_ips[each.value.name].id
-   server_id      = each.value.server_id
+   server_id      = each.value.server.id
 }

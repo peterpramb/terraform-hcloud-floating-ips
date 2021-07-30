@@ -28,7 +28,10 @@ module "floating_ip" {
       description   = "Floating IPv4 address"
       dns_ptr       = "svc.example.net"
       dns_ptr6      = []
-      server_id     = "7569968"
+      server        = {
+        "name" = "server-1"
+        "id"   = "7569968"
+      }
       labels        = {
         "managed"    = "true"
         "managed_by" = "Terraform"
@@ -43,7 +46,10 @@ module "floating_ip" {
       dns_ptr6      = [
         ["svc.example.net", "1:2:3:100"]
       ]
-      server_id     = "7569968"
+      server        = {
+        "name" = "server-1"
+        "id"   = "7569968"
+      }
       labels        = {
         "managed"    = "true"
         "managed_by" = "Terraform"
@@ -87,7 +93,7 @@ See [examples](https://github.com/peterpramb/terraform-hcloud-floating-ips/blob/
 | [description](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/floating_ip#description) | Description of the floating IP. | string | no |
 | [dns\_ptr](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/rdns#dns_ptr) | The DNS name the IPv4 address should resolve to. | string | no |
 | dns\_ptr6 | The DNS name(s) the IPv6 address(es) should resolve to. | list(tuple([*dns\_ptr6*](#dns_ptr6)) | no |
-| [server\_id](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/floating_ip_assignment#server_id) | Server to assign the floating IP to. | string | no |
+| server | Inputs for server assignment. | map([*server*](#server)) | no |
 | [labels](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/floating_ip#labels) | Map of user-defined labels. | map(string) | no |
 
 
@@ -97,6 +103,14 @@ See [examples](https://github.com/peterpramb/terraform-hcloud-floating-ips/blob/
 |:-----:|-------------|:----:|:--------:|
 | \[0] | The DNS name the IPv6 address should resolve to. | string | yes |
 | \[1] | The *host* part of the IPv6 address. | string | yes |
+
+
+#### *server*
+
+| Name | Description | Type | Required |
+|------|-------------|:----:|:--------:|
+| [name](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/server#name) | Name of the server to assign the floating IP to. | string | yes |
+| [id](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/floating_ip_assignment#server_id) | ID of the server to assign the floating IP to. | string | yes |
 
 
 ### Defaults
@@ -110,7 +124,7 @@ floating_ips = [
     description   = null
     dns_ptr       = null
     dns_ptr6      = []
-    server_id     = null
+    server        = null
     labels        = {}
   }
 ]
