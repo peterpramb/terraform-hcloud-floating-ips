@@ -17,6 +17,7 @@ locals {
       "description"   = null
       "dns_ptr"       = var.dns_ptr
       "dns_ptr6"      = []
+      "protection"    = false
       "server"        = null
       "labels"        = var.labels
     },
@@ -29,6 +30,7 @@ locals {
       "dns_ptr6"      = [
         [var.dns_ptr, var.host_num6]
       ]
+      "protection"    = false
       "server"        = null
       "labels"        = var.labels
     }

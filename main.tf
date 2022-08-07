@@ -59,14 +59,15 @@ locals {
 # ------------
 
 resource "hcloud_floating_ip" "floating_ips" {
-  for_each      = local.float_ips
+  for_each          = local.float_ips
 
-  name          = each.value.name
-  home_location = each.value.home_location
-  type          = each.value.type
-  description   = each.value.description
+  name              = each.value.name
+  home_location     = each.value.home_location
+  type              = each.value.type
+  description       = each.value.description
+  delete_protection = each.value.protection
 
-  labels        = each.value.labels
+  labels            = each.value.labels
 }
 
 

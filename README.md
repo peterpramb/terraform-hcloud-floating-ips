@@ -28,6 +28,7 @@ module "floating_ip" {
       description   = "Floating IPv4 address"
       dns_ptr       = "svc.example.net"
       dns_ptr6      = []
+      protection    = true
       server        = {
         "name" = "server-1"
         "id"   = "7569968"
@@ -46,6 +47,7 @@ module "floating_ip" {
       dns_ptr6      = [
         ["svc.example.net", "1:2:3:100"]
       ]
+      protection    = true
       server        = {
         "name" = "server-1"
         "id"   = "7569968"
@@ -73,7 +75,7 @@ See [examples](https://github.com/peterpramb/terraform-hcloud-floating-ips/blob/
 
 | Name | Version |
 |------|---------|
-| [hcloud](https://registry.terraform.io/providers/hetznercloud/hcloud) | &ge; 1.20 |
+| [hcloud](https://registry.terraform.io/providers/hetznercloud/hcloud) | &ge; 1.31 |
 
 
 ## Inputs
@@ -93,6 +95,7 @@ See [examples](https://github.com/peterpramb/terraform-hcloud-floating-ips/blob/
 | [description](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/floating_ip#description) | Description of the floating IP. | string | no |
 | [dns\_ptr](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/rdns#dns_ptr) | The DNS name the IPv4 address should resolve to. | string | no |
 | dns\_ptr6 | The DNS name(s) the IPv6 address(es) should resolve to. | list(tuple([*dns\_ptr6*](#dns_ptr6)) | no |
+| [protection](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/floating_ip#delete_protection) | Protect floating IP from deletion. | bool | no |
 | server | Inputs for server assignment. | map([*server*](#server)) | no |
 | [labels](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/floating_ip#labels) | Map of user-defined labels. | map(string) | no |
 
@@ -124,6 +127,7 @@ floating_ips = [
     description   = null
     dns_ptr       = null
     dns_ptr6      = []
+    protection    = false
     server        = null
     labels        = {}
   }
@@ -152,6 +156,7 @@ floating_ips = [
 floating_ips = [
   {
     "assignment" = {}
+    "delete_protection" = false
     "description" = ""
     "home_location" = "nbg1"
     "id" = "342748"
@@ -166,6 +171,7 @@ floating_ips = [
 floating_ip_ids = {
   "342748" = {
     "assignment" = {}
+    "delete_protection" = false
     "description" = ""
     "home_location" = "nbg1"
     "id" = "342748"
@@ -180,6 +186,7 @@ floating_ip_ids = {
 floating_ip_names = {
   "fip4-nbg1-1" = {
     "assignment" = {}
+    "delete_protection" = false
     "description" = ""
     "home_location" = "nbg1"
     "id" = "342748"
